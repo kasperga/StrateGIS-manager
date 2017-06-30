@@ -1,0 +1,5 @@
+{
+  "FIdFieldName": "FID",
+  "GeomFieldName": "geom",
+  "ServerName": "http://localhost:8000"
+}

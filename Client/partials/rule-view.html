@@ -1,0 +1,17 @@
+<table class="table movietable">
+    <tr>
+        <td><h3>Details for {{rule.rule_name}}</h3></td>
+        <td></td>
+    </tr>
+    <tr>
+        <td>Rule Name</td>
+        <td>{{rule.rule_name}}</td>
+    </tr>
+    <tr>
+        <td>Id</td>
+        <td>{{rule.id}}</td>
+    </tr>
+</table>
+<div>
+    <a class="btn btn-primary" ui-sref="editRule({ruleId:rule.id})">Edit</a>
+</div>

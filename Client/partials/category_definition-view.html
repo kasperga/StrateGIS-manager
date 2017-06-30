@@ -1,0 +1,25 @@
+<table class="table movietable">
+    <tr>
+        <td><h3>Details for {{category_definition.id}}</h3></td>
+        <td></td>
+    </tr>
+    <tr>
+        <td>Category definition id</td>
+        <td>{{category_definition.id}}</td>
+    </tr>
+    <tr>
+        <td>Category definition category id</td>
+        <td>{{category_definition.category_id}}</td>
+    </tr>
+	<tr>
+        <td>Category definition layer Name</td>
+        <td>{{category_definition.layer_name}}</td>
+    </tr>
+    <tr>
+        <td>Category definition output layer name</td>
+        <td>{{category_definition.output_layer_name}}</td>
+    </tr>
+</table>
+<div>
+    <a class="btn btn-primary" ui-sref="editCategory_definition({category_definitionId:category_definition.id})">Edit</a>
+</div>

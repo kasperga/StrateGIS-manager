@@ -1,0 +1,27 @@
+<form role="form" ng-controller="StoredProceduresCheckinNewIntersectionLayerController as ctrl" ng-submit="executeCheckinNewIntersectionLayer()" ng-cloak>
+	<div class="md-padding" >
+		<div layout="column" class="standard">
+			<h2 class="md-title">Checkin new intersection layer</h2>
+			Checkin new intersection layer. When checked in, geometries is converted to the predefined square grid definition. Please note layer in the database MUST contain ‘geom’, geometry field and ‘score’ integer field.
+			Input 1: name of existing table in SQL Server
+			output table name is always input table name + ’_grid’
+			<br><br>
+			<div layout-wrap layout-gt-sm="row" flex-gt-sm="50" >
+			  <md-checkbox ng-model="recalculateLayers" aria-label="Checkbox for RecalculateLayers option">
+				Recalculate Layers: Please note that this operation may take some time
+			  </md-checkbox>
+			</div>
+			<div layout-gt-sm="row">
+			  <md-input-container class="md-block" flex-gt-sm>
+				<label>Table name for original data in StrateGIS database</label>
+				<input ng-model="userStateTable">
+			  </md-input-container>
+			</div>
+			
+			<div>
+				<md-button type="submit" class="md-raised md-primary" value="Save">Submit</md-button>
+			</div>
+
+		</div>
+	</div>
+</form>

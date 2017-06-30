@@ -1,0 +1,45 @@
+<div ng-controller="StoredProceduresCalculateLayerController as ctrl" ng-cloak>
+
+	<div layout-align="center center" layout="column">
+		<h2 class="md-title">Update category layers</h2>
+		This procedure will calculate one single layer.  
+		All rules for each layer will be applied in order to update the property feature_score. 
+		If output table is not existing, this script will create it (ie. the fields for amnaging geometry, feature_score etc. is automatically created). 
+		Please note: depending on the complexity and number of rules this stored procedure may execute for some time, before it is complete. 
+		Please note: If one layer table is assigned to more than one category, this tables calculated feature_score is flushed and may affect other categories 
+		The property RecalculateLayers determines if the grid in each of the table is recalculated (may take some time)
+		
+		<div layout-wrap layout-gt-sm="row" flex-gt-sm="50" style="border-style: solid; border-width: 1px;" >
+          <md-checkbox ng-model="formData.recalculateLayers" aria-label="Checkbox for RecalculateLayers option">
+            Recalculate Layers
+          </md-checkbox>
+        </div>
+		<div>
+		{{formData.recalculateLayers}}
+		</div>
+		<div layout-gt-sm="row">
+          <md-input-container class="md-block" flex-gt-sm>
+            <label>Output table name</label>
+            <input ng-model="user.OutputTableName">
+          </md-input-container>
+		</div>
+		<div layout-gt-sm="row">
+          <md-input-container class="md-block" flex-gt-sm>
+            <label>FeatureClassName</label>
+            <input ng-model="user.FeatureClassName">
+          </md-input-container>
+		</div>
+		<div layout-gt-sm="row">
+          <md-input-container class="md-block" flex-gt-sm>
+            <label>First name</label>
+            <input ng-model="user.FIdFieldName">
+          </md-input-container>
+		</div>
+		<div layout-gt-sm="row">
+          <md-input-container class="md-block" flex-gt-sm>
+            <label>First name</label>
+            <input ng-model="user.GeomFieldName">
+          </md-input-container>
+		</div>
+	</div>
+</div>

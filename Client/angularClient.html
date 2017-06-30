@@ -1,0 +1,68 @@
+﻿<!DOCTYPE html>
+<html data-ng-app="strateGISApp">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>StrateGIS Manager</title>
+	<base href="/"/>
+	<link type="text/css" rel="stylesheet" href="client/stylesheets/bootstrap.min.css"/>
+	<link type="text/css" rel="stylesheet" href="client/stylesheets/app.css">
+	<link type="text/css" rel="stylesheet" href="client/stylesheets/angular-material.css">
+</head>
+
+<body>
+<div>
+	<div ng-controller="AppCtrl" layout="row" layout-sm="column"  ng-cloak>
+
+		<div flex="none"  width="300px" height = "100%">
+			<md-sidenav
+				class="md-sidenav-left"
+				md-component-id="left"
+				md-is-locked-open="$mdMedia('gt-xs')"
+				md-disable-backdrop
+				md-whiteframe="4">
+
+			  <md-toolbar class="md-theme-indigo">
+				<h1 class="md-toolbar-tools">StrateGIS manager</h1>
+			  </md-toolbar>
+			  <md-content flex role = "navigation" layout-padding ng-controller="LeftCtrl">				
+			  </md-content>
+			  <div layout="column" layout-align="center stretch" role = "navigation">
+				   <md-button ui-sref="categories" class="md-raised md-primary">Categories</md-button>
+				   <md-button ui-sref="category_definitionList" class="md-raised md-primary">Category Definition</md-button>
+				   <md-button ui-sref="category_definition_rulesList" class="md-raised md-primary">Category Definition Rules</md-button>
+				   <md-button ui-sref="rules" class="md-raised md-primary">Rules</md-button>
+				   <md-button ui-sref="storedProcedures" class="md-raised md-primary">Stored Procedures</md-button>
+			  </div>
+			  <div layout-align="center end">
+			  Database: {{serverSettings.database}}<br>
+			  Host: {{serverSettings.hostName}}:{{serverSettings.webPort}}<br>
+			  </div>
+			</md-sidenav>
+		</div>
+
+		<div flex flex="66" flex-offset="5" layout-align="start center">
+			<md-content layout-padding>
+			<div ui-view></div>
+
+			</md-content>
+		</div> 
+	</div>
+</div>
+	
+
+	<script src="/node_modules/angular/angular.js"></script>
+	<script type="text/javascript" src="../client/controllers/app.js"></script>
+	<!--<script type="text/javascript" src="../client/app.config.js"></script>-->
+    <script type="text/javascript" src="../client/controllers/controllers.js"></script>
+    <script type="text/javascript" src="../client/controllers/services.js"></script>
+    <script type="text/javascript" src="/node_modules/angular-resource/angular-resource.min.js"></script>
+	<script type="text/javascript" src="../client/scripts/angular-ui-router.min.js"></script>
+	<script type="text/javascript" src="/node_modules/angular-material/angular-material.min.js"></script>
+	<script type="text/javascript" src="/node_modules/angular-aria/angular-aria.min.js"></script>
+	<script type="text/javascript" src="/node_modules/angular-animate/angular-animate.min.js"></script>
+	<script type="text/javascript" src="/node_modules/angular-messages/angular-messages.min.js"></script>
+</body>
+</html>

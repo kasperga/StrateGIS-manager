@@ -1,0 +1,21 @@
+<a ui-sref="newCategory" class="btn-primary btn-lg nodecoration">Add New Category</a>
+<table class="table categorytable">
+    <tr>
+        <td><b>Categories</b></td>
+        <td></td>
+    </tr>
+	<tr> 
+        <td><b>Id</b></td>
+		<td><b>Name</b></td>
+		<td><b>Layer names</b></td>
+    </tr>
+    <tr ng-repeat="category in categories.recordset"> 
+        <td>{{category.id}}</td>
+		<td>{{category.category_name}}</td>
+		<td>{{category.category_output_layer_name}}</td>
+		<td>
+            <a class="btn btn-primary" ui-sref="viewCategory({categoryId:category.id})">View</a>
+            <a class="button"  ng-click="deleteCategory(category)">Delete</a>
+        </td>
+    </tr>
+</table>

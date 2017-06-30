@@ -1,0 +1,15 @@
+<h2 class="md-title">Execute a stored procedure</h2>
+
+<section layout="row" layout-sm="column" layout-align="start center" layout-align-sm="start start" ng-controller="StoredProceduresController as ctrl" layout-wrap>
+	<md-button class="md-raised md-primary" ui-sref="spUpdateCategoryLayers" ng-disabled="running">Update Category Layers</md-button>
+	<md-button class="md-raised md-primary" ui-sref="spUpdateCategory" ng-disabled="running">Update Category</md-button>
+	<md-button class="md-raised md-primary" ui-sref="spCheckinNewAnalysisLayer" ng-disabled="running">Checkin new Analysis Layer</md-button>
+	<md-button class="md-raised md-primary" ui-sref="spCheckinNewIntersectionLayer" ng-disabled="running">Checkin new intersection Layer</md-button>
+	
+	
+	
+</section>
+<br><br>
+<div>
+{{errorText}}	
+</div>

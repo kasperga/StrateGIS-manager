@@ -1,0 +1,28 @@
+<a ui-sref="newCategory" class="btn-primary btn-lg nodecoration">Add New Category</a>
+
+<h2 class="md-title">Categories</h2>
+
+<table class="table categorytable">
+ 
+	<tr> 
+        <td><b>Id</b></td>
+		<td><b>Name</b></td>
+		<td><b>Layer names</b></td>
+    </tr>
+    <tr ng-repeat="category in categories.recordset"> 
+        <td>{{category.id}}</td>
+		<td>{{category.category_name}}</td>
+		<td>{{category.category_output_layer_name}}</td>
+		<td>
+			<md-button class="md-icon-button" aria-label="Edit" ui-sref="editCategory({categoryId:category.id})"">
+				<md-icon md-svg-icon="/client/icons/pencil.svg"></md-icon>
+			</md-button>
+			<md-button class="md-icon-button" aria-label="View" ui-sref="viewCategory({categoryId:category.id})">
+				<md-icon md-svg-icon="/client/icons/eye.svg"></md-icon>
+			</md-button>
+            <md-button class="md-icon-button" aria-label="Delete" ng-click="deleteCategory(category)">
+				<md-icon md-svg-icon="/client/icons/x.svg"></md-icon>
+			</md-button>
+        </td>
+    </tr>
+</table>

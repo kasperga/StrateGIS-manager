@@ -1,0 +1,35 @@
+<md-content layout-padding class="md-theme-indigo" ng-cloak>
+	<div>
+		<div layout-gt-xs="row">
+			<md-input-container class="md-block">
+				<label>Id</label>
+				<input ng-model="category_definition.id" disabled>
+			</md-input-container>
+		</div>
+		<div layout-gt-xs="row">
+			<md-input-container>
+				<label style="overflow: visible !important;">Category Id</label>
+				<md-select ng-model="category_definition.category_id">
+					<md-option ng-repeat="category in categories.recordset" ng-value="category.id">
+						{{category.category_name}}
+					</md-option>
+				</md-select>
+        </md-input-container>
+		</div>
+		<div layout-gt-xs="row">
+			<md-input-container class="md-block">
+				<label>Layer name</label>
+				<input ng-model="category_definition.layer_name">
+			</md-input-container>
+		</div>
+		<div layout-gt-xs="row">
+			<md-input-container class="md-block">
+				<label>Output layer name</label>
+				<input ng-model="category_definition.output_layer_name">
+			</md-input-container>
+		</div>
+	</div>
+	<div>
+		<md-button type="submit" class="md-raised md-primary" value="Save">Submit</md-button>
+	</div>
+</md-content>

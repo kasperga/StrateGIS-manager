@@ -1,0 +1,31 @@
+<a ui-sref="newCategory_definition_rules" class="btn-primary btn-lg nodecoration">Add New Category Definition Rule</a>
+
+<h2 class="md-title">Category definition rules</h2>
+
+<table class="table">
+	<tr> 
+        <td><b>Id</b></td>
+		<td><b>Category Definition Id</b></td>
+		<td><b>Rule Id</b></td>
+		<td><b>Rule Argument 1</b></td>
+		<td><b>Rule Argument 2</b></td>
+    </tr>
+	<tr ng-repeat="category_definition_rules in category_definition_rulesList.recordset"> 
+        <td>{{category_definition_rules.id}}</td>
+		<td>{{category_definition_rules.category_definition_id}}</td>
+		<td>{{category_definition_rules.rules_id}}</td>
+		<td>{{category_definition_rules.rule_argument1}}</td>
+		<td>{{category_definition_rules.rule_argument2}}</td>
+		<td>
+			<md-button class="md-icon-button" aria-label="Edit" ui-sref="editCategory_definition_rules({category_definition_rulesId:category_definition_rules.id})">
+				<md-icon md-svg-icon="/client/icons/pencil.svg"></md-icon>
+			</md-button>
+			<md-button class="md-icon-button" aria-label="View" ui-sref="viewCategory_definition_rules({category_definition_rulesId:category_definition_rules.id})"">
+				<md-icon md-svg-icon="/client/icons/eye.svg"></md-icon>
+			</md-button>
+            <md-button class="md-icon-button" aria-label="Delete" ng-click="deleteCategory_definition_rules(category_definition_rules)">
+				<md-icon md-svg-icon="/client/icons/x.svg"></md-icon>
+			</md-button>
+        </td>
+    </tr>
+</table>

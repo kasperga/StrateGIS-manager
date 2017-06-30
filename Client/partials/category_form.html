@@ -1,0 +1,25 @@
+<md-content layout-padding class="md-theme-indigo" ng-cloak>
+	<div>
+		<div layout-gt-xs="row">
+			<md-input-container class="md-block">
+				<label>Category id</label>
+				<input ng-model="category.id" disabled>
+			</md-input-container>
+		</div>
+		<div layout-gt-xs="row">
+			<md-input-container class="md-block">
+				<label>Category name</label>
+				<input ng-model="category.category_name">
+			</md-input-container>
+		</div>
+		<div layout-gt-xs="row">
+			<md-input-container class="md-block" flex-gt-sm>
+				<label>Category layer name</label>
+				<input ng-model="category.category_output_layer_name">
+			</md-input-container>
+		</div>
+	</div>
+	<div>
+		<md-button type="submit" class="md-raised md-primary" value="Save">Submit</md-button>
+	</div>
+</md-content>

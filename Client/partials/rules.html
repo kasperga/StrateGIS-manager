@@ -1,0 +1,25 @@
+<a ui-sref="newRule" class="btn-primary btn-lg nodecoration">Add New Rule</a>
+
+<h2 class="md-title">Rules</h2>
+
+<table class="table">
+	<tr> 
+        <td><b>Id</b></td>
+		<td><b>Rule Name</b></td>
+    </tr>
+	<tr ng-repeat="rule in rules.recordset" > 
+        <td>{{rule.id}}</td>
+		<td>{{rule.rule_name}}</td>
+		<td>
+			<md-button class="md-icon-button" aria-label="Edit" ui-sref="editRule({ruleId:rule.id})">
+				<md-icon md-svg-icon="/client/icons/pencil.svg"></md-icon>
+			</md-button>
+			<md-button class="md-icon-button" aria-label="View" ui-sref="viewRule({ruleId:rule.id})">
+				<md-icon md-svg-icon="/client/icons/eye.svg"></md-icon>
+			</md-button>
+            <md-button class="md-icon-button" aria-label="Delete" ng-click="deleteRule(rule)">
+				<md-icon md-svg-icon="/client/icons/x.svg"></md-icon>
+			</md-button>
+        </td>
+    </tr>
+</table>

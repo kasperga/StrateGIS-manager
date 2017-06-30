@@ -1,0 +1,30 @@
+<form role="form" ng-submit="executeUpdateCategoryLayers(category)" ng-controller="StoredProcedureUpdateCategoryLayersController as ctrl">
+	<div class="md-menu-demo" ng-cloak>
+
+		<div class="menu-demo-container" layout="column">
+			<h2 class="md-title">Update category layers</h2>
+			When rules, settings or layers are modified, the complete set of layers in the category has to be updated. Enter the category name to update and pressRecalculateLayers.
+			Please note the option RecalculateLayers = 1 meaning all layers geometries will be recalculated and should only be used if geometries inside layers has changed.
+			<br><br>
+			<div layout-wrap layout-gt-sm="row" flex-gt-sm="50" class="md-padding">
+			  <md-checkbox ng-model="recalculateLayers" aria-label="Checkbox for RecalculateLayers option">
+				Recalculate Layers
+			  </md-checkbox>
+			</div>
+
+			<md-input-container layout="row">
+			  <label>Category</label>
+			  <md-select ng-model="userStateUpdateCategory" required>
+				<!--<md-option><em>None</em></md-option>-->
+				<md-option ng-repeat="category in categories.recordset" ng-value="category">
+				  {{category.category_name}}
+				</md-option>
+			  </md-select>
+			</md-input-container>
+
+			<div>
+				<md-button type="submit" class="md-raised md-primary" value="Save">Submit</md-button>
+			</div>
+		</div>
+	</div>
+</form>

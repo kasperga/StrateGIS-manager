@@ -1,0 +1,50 @@
+<md-content layout-padding class="md-theme-indigo" ng-cloak>
+	<div>
+		<div layout-gt-xs="row">
+			<md-input-container class="md-block">
+				<label>Id</label>
+				<input ng-model="category_definition_rules.id" disabled>
+			</md-input-container>
+		</div>
+		
+		<div layout-gt-xs="row">
+			<md-input-container class="md-block">
+				<label>Category Definition Id</label>
+				<input ng-model="category_definition_rules.category_definition_id">
+			</md-input-container>
+		</div>
+		<div layout-gt-xs="row">
+			<md-input-container>
+				<label style="overflow: visible !important;">Rule Id</label>
+				<md-select ng-model="category_definition_rules.rules_id">
+					<md-option ng-repeat="rule in rules.recordset" ng-value="rule.id">
+						{{rule.rule_name}}
+					</md-option>
+				</md-select>
+        </md-input-container>
+		</div>
+		<div layout-gt-xs="row">
+			<md-input-container class="md-block">
+				<label>Rule Argument 1</label>
+				<input required type="number" name = "rule1" step="any" ng-model="category_definition_rules.rule_argument1" ng-pattern="/^-?[0-9][^\.]*$/">
+				<div ng-messages="cdrForm.rule1.$error" multiple md-auto-hide="false" role="alert">
+					<div ng-message="required">
+						You must define a value to continue.
+					</div>
+					<div ng-message="pattern">
+						Must be an integer.
+					</div>
+				</div>
+			</md-input-container>
+		</div>
+		<div layout-gt-xs="row">
+			<md-input-container class="md-block">
+				<label>Rule Argument 2</label>
+				<input ng-model="category_definition_rules.rule_argument2">
+			</md-input-container>
+		</div>
+	</div>
+	<div>
+		<md-button type="submit" class="md-raised md-primary" value="Save">Submit</md-button>
+	</div>
+</md-content>

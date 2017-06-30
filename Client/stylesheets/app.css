@@ -1,0 +1,68 @@
+.top-buffer{
+    margin-top:10px;
+}
+
+a.nodecoration{
+    text-decoration:none;
+}
+
+.menudemoBasicUsage .md-menu-demo {
+  padding: 24px; }
+
+.menudemoBasicUsage .menu-demo-container {
+  min-height: 200px; }
+  
+  
+.icondemoLoadSvgIconsFromUrl .s24 {
+  width: 24px;
+  height: 24px;
+  color: #f00; }
+  
+ .checkboxdemoBasicUsage div.flex-xs {
+  min-height: 40px; }
+
+.checkboxdemoBasicUsage .checkboxDemo1 div {
+  clear: both; }
+
+.checkboxdemoBasicUsage p {
+  padding-left: 8px; }
+
+.checkboxdemoBasicUsage fieldset.standard {
+  border-style: solid;
+  border-width: 1px; }
+
+.checkboxdemoBasicUsage legend {
+  color: #3F51B5; }
+
+.checkboxdemoBasicUsage legend code {
+  color: #3F51B5;
+  font-weight: normal; }
+  
+.docs-menu, .docs-menu ul {
+    list-style: none;
+    padding: 0;
+    max-width: 100%;
+    overflow-x: hidden;
+}
+
+.docs-menu > li {
+    border-bottom: 1px solid #267ED5;
+}
+
+.docs-menu li {
+    margin: 0;
+}
+
+.version-picker {
+    background: #267ED5 !important;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+    margin-bottom: 1px !important;
+}
+
+.inputdemoErrors .inputErrorsApp {
+  min-height: 48px; }
+
+.inputdemoErrors md-input-container > p {
+  font-size: 0.8em;
+  text-align: left;
+  width: 100%; }
