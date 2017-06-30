@@ -1,7 +1,12 @@
 {
-  "name": "sample-sqlconn",
+  "name": "StrateGIS",
   "version": "0.0.0",
-  "description": "SampleSQLConn",
+  "description": "StrateGIS",
+  "contributors": [
+    {
+      "name": "KGA"
+    }
+  ]
   "main": "app.js",
   "author": {
     "name": "LKM"
