@@ -17,6 +17,7 @@ Made with Node.JS and angular
 ## Installation:
 
 * Download or pull a copy.
+* Install NPM if it is not already installed: https://www.npmjs.com/get-npm
 * In the unpacked folder open a command prompt and write: NPM install
 * After installation is done start the server with the following command: node app
 
