@@ -1,9 +1,9 @@
 # StrateGIS-manager
-##Manager and GUI for the StrateGIS solution
+## Manager and GUI for the StrateGIS solution
 
 Made with Node.JS and angular
 
-##Dependencies:
+## Dependencies:
 * Angular
 * Angular-material
 * Angular-Resource
@@ -14,7 +14,7 @@ Made with Node.JS and angular
 
 
 
-##Installation:
+## Installation:
 
 * Download or pull a copy.
 * In the unpacked folder open a command prompt and write: NPM install
