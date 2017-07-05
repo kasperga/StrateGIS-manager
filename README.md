@@ -41,5 +41,6 @@ You should now be able to see the GUI in a browser on localhost:8000
 * Add the node application to a web page in IIS. Make sure it is setup to run at just the location and not ie. location/x/
 * Install IIS URL rewrite module (remember to use the correct one for your IIS version)
 * Download a build of iisnode. Run setup samples as it is the easiest way to setup various rules.
+* Restart/recycle app pool
 
 You should now be able to see the application in a browser.
