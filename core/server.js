@@ -120,6 +120,10 @@ const server = http.createServer((req, res) => {
                 angularClient.getInformation(req, res);  
 				//catalog.getInformation(req, res);            
                 break;
+			case "app.js": 
+                angularClient.getInformation(req, res);  
+				//catalog.getInformation(req, res);            
+                break;
             case "settings":
                 settingsInfo.get(req, res);            
                 break;	
@@ -208,6 +212,6 @@ const server = http.createServer((req, res) => {
     
 });
 
-server.listen(settings.webPort, settings.hostName, () => {
-  console.log(`Server running at http://${settings.hostName}:${settings.webPort}/`);
+server.listen(process.env.PORT, settings.hostName, () => {
+  console.log(`Server running at http://${settings.hostName}:${process.env.PORT}/`);
 });
