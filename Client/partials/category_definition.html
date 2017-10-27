@@ -1,18 +1,16 @@
-<a ui-sref="newCategory_definition" class="btn-primary btn-lg nodecoration">Add New Category Definition</a>
-
 <h2 class="md-title">Category definition</h2>
+
+<p>Use the function 'Check-in analysis layer' to add a new category definition.</p>
 
 <table class="table">
 	<tr> 
-        <td><b>Id</b></td>
-		<td><b>Category Id</b></td>
+		<td><b>Category</b></td>
 		<td><b>Layer name</b></td>
 		<td><b>Output layer name</b></td>
     </tr>
 	<tr ng-repeat="rule in rules.recordset" > 
         <tr ng-repeat="category_definition in category_definitionList.recordset"> 
-        <td>{{category_definition.id}}</td>
-		<td>{{category_definition.category_id}}</td>
+		<td>{{category_definition.category_name}}</td>
 		<td>{{category_definition.layer_name}}</td>
 		<td>{{category_definition.output_layer_name}}</td>
 		<td>

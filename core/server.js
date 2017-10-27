@@ -176,7 +176,6 @@ const server = http.createServer((req, res) => {
 							{
                                 if (outputformat == 'json') 
 								{
-									console.log("test 1 " );
 									res.writeHead(200, {'Content-Type': 'application/json'});
 									res.write(JSON.stringify(data, null, 4));
 								}

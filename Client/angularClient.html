@@ -24,8 +24,11 @@
 				md-disable-backdrop
 				md-whiteframe="4">
 
-			  <md-toolbar class="md-theme-indigo">
+			  <md-toolbar layout ="row">
 				<h1 class="md-toolbar-tools">StrateGIS manager</h1>
+				<md-button ui-sref="info" class="md-fab md-mini md-primary" aria-label="More">
+					<md-icon md-svg-src="/client/icons/info.svg" style="color: greenyellow;"></md-icon>
+				</md-button>
 			  </md-toolbar>
 			  <md-content flex role = "navigation" layout-padding ng-controller="LeftCtrl">				
 			  </md-content>
@@ -34,11 +37,7 @@
 				   <md-button ui-sref="category_definitionList" class="md-raised md-primary">Category Definition</md-button>
 				   <md-button ui-sref="category_definition_rulesList" class="md-raised md-primary">Category Definition Rules</md-button>
 				   <md-button ui-sref="rules" class="md-raised md-primary">Rules</md-button>
-				   <md-button ui-sref="storedProcedures" class="md-raised md-primary">Stored Procedures</md-button>
-			  </div>
-			  <div layout-align="center end">
-			  Database: {{serverSettings.database}}<br>
-			  Host: {{serverSettings.hostName}}:{{serverSettings.webPort}}<br>
+				   <md-button ui-sref="storedProcedures" class="md-raised md-primary">Functions</md-button>
 			  </div>
 			</md-sidenav>
 		</div>

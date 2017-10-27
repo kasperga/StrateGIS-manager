@@ -1,5 +1,5 @@
 ﻿exports.dbConfig = {
-    database: "Svendborg_Vand",
+    database: "Svendbord_Vand_udv",
     server: "PC10082\\SQLEXPRESS",
     driver: "msnodesqlv8",
     options: {
@@ -16,3 +16,6 @@ exports.constants = {
   FIdFieldName: 'FID',
   GeomFieldName: 'geom'
 }
+
+exports.minWeight = -5;
+exports.maxWeight = 5;

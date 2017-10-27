@@ -47,11 +47,13 @@ exports.executeSP = function(procedurename, data, callback) {
                 console.log("data.FIdFieldName: " + data.FIdFieldName);
                 console.log("data.GeomFieldName: " + data.GeomFieldName);
                 console.log("data.RecalculateFeatures: " + data.RecalculateFeatures);
+                console.log("data.categoryId: " + data.categoryId);
                 request.input('OutputTableName', sql.VarChar(30), data.OutputTableName);
                 request.input('FeatureClassName', sql.VarChar(30), data.FeatureClassName);
                 request.input('FIdFieldName', sql.VarChar(30), data.FIdFieldName);
                 request.input('GeomFieldName', sql.VarChar(30), data.GeomFieldName);
                 request.input('RecalculateFeatures', sql.Bit, data.OutputTableName);
+                request.input('CategoryId', data.categoryId);
             break;
             case "sp_updatecategory":
                 console.log("data.CategoryName: " + data.CategoryName);
@@ -62,6 +64,8 @@ exports.executeSP = function(procedurename, data, callback) {
                 request.input('CategoryName', sql.VarChar(30), data.CategoryName);
                 console.log("data.RecalculateLayers: " + data.RecalculateLayers);
                 request.input('RecalculateLayers', sql.Bit, data.RecalculateLayers);                
+            break;
+            case "sp_updateallcategories":   
             break;
             default: throw new Error("Invalid or unsupported procedure name for StrateGIS Manager: " + procedurename); 
         }
