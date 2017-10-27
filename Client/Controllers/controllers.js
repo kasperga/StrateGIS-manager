@@ -1,13 +1,16 @@
 angular.module('strateGISApp.controllers', ['ngMaterial', 'ngMessages']).controller('StartUpController',function($http,$scope,$stateParams,$state,SettingService){
 
-    $http.get('client/settings/app.config.json').then(function(dataRaw) {
-		
+    //$http.get('client/settings/app.config.json').then(function(dataRaw) {
+	$http.get('/settings/').then(function(dataRaw) {	
 		var settings = SettingService.getSettings();
 		
 		settings.FIdFieldName = dataRaw.data.FIdFieldName;
 		settings.GeomFieldName = dataRaw.data.GeomFieldName;
 		settings.ServerName = dataRaw.data.ServerName;
-		
+
+		settings.minWeight = dataRaw.data.minWeight;
+		settings.maxWeight = dataRaw.data.maxWeight;
+
 		SettingService.setSettings(settings);
 	});
 	
@@ -112,7 +115,8 @@ angular.module('strateGISApp.controllers', ['ngMaterial', 'ngMessages']).control
 }).controller('Category_definition_rulesListController', function($scope, $state, popupService, $window, Category_definition_rules) {
 
 	$scope.category_definition_rulesList = Category_definition_rules.get(); //fetch all categories.
-	
+	//console.dir($scope.category_definition_rulesList);
+
 	$scope.deleteCategory_definition_rules=function(category_definition_rules){
 		//console.dir($scope.rule);
 		//console.dir(rule);
@@ -128,14 +132,23 @@ angular.module('strateGISApp.controllers', ['ngMaterial', 'ngMessages']).control
     var result = Category_definition_rules.get({id: $stateParams.category_definition_rulesId, method: 'id'}, function(myVar){
 
 	var fromJson = angular.fromJson(myVar.recordset);
+	//console.dir(fromJson);
 	$scope.category_definition_rules = fromJson[0];	
 	});
 
-}).controller('Category_definition_rulesCreateController',function($scope,$state,$stateParams,Category_definition_rules, Rule){
+}).controller('Category_definition_rulesCreateController',function($scope,$state,$stateParams,Category_definition_rules, Rule, Category_definition,SettingService){
+	console.log(SettingService.getSettings().minWeight);
+	console.dir(SettingService.getSettings());
+	$scope.minWeight = SettingService.getSettings().minWeight;
+	$scope.maxWeight = SettingService.getSettings().maxWeight;
+	//$scope.category_definition_rules.rule_argument1 = SettingService.standardWeight;
 
     $scope.category_definition_rules=new Category_definition_rules();
 	$scope.category_definition_rules.rule_argument2 = null;
 	$scope.rules = Rule.get();
+	$scope.definitions = Category_definition.get();
+
+
 
     $scope.addCategory_definition_rules=function(){
         Category_definition_rules.save({method: "add"}, $scope.category_definition_rules, function(){
@@ -143,7 +156,9 @@ angular.module('strateGISApp.controllers', ['ngMaterial', 'ngMessages']).control
         });
     }
 
-}).controller('Category_definition_rulesEditController',function($scope,$state,$stateParams,Category_definition_rules, Rule){
+}).controller('Category_definition_rulesEditController',function($scope,$state,$stateParams,Category_definition_rules, Rule, Category_definition,SettingService){
+	$scope.minWeight = SettingService.minWeight;
+	$scope.maxWeight = SettingService.maxWeight;
 
     $scope.updateCategory_definition_rules=function(){
 		if($scope.cdrForm.$valid){
@@ -158,15 +173,17 @@ angular.module('strateGISApp.controllers', ['ngMaterial', 'ngMessages']).control
 		var fromJson = angular.fromJson(myVar.recordset);
 		$scope.category_definition_rules = fromJson[0];
 		$scope.rules = Rule.get();
+		$scope.definitions = Category_definition.get();
 	});
 
 	};
 	$scope.loadCategory_definition_rules(); // Load a category which can be edited on UI
   
-}).controller('Category_definitionListController', function($scope, $state, popupService, $window, Category_definition) {
+}).controller('Category_definitionListController', function($scope, $state, popupService, $window, Category_definition, Category) {
 
-	$scope.category_definitionList = Category_definition.get(); //fetch all categories.
-	
+	//fetch all categories definitions
+	$scope.category_definitionList = Category_definition.get(); 
+
 	$scope.deleteCategory_definition=function(category_definition){
         if(popupService.showPopup('Really delete this?')){
             Category_definition.delete({method: 'delete'}, category_definition, function(){
@@ -278,7 +295,11 @@ angular.module('strateGISApp.controllers', ['ngMaterial', 'ngMessages']).control
 		$scope.errorText = ""; // not yet used
 		
 	
-}).controller('StoredProcedureUpdateCategoryController',function($scope,$state,$stateParams,StoredProcedures, Category, $mdDialog, $timeout, SPRunningService){
+	}).controller('InfoController',function($scope,$state,$stateParams,StoredProcedures,$mdDialog,ServerSetting){
+	
+		$scope.serverSettings = ServerSetting.get();	
+		
+	}).controller('StoredProcedureUpdateCategoryController',function($scope,$state,$stateParams,StoredProcedures, Category, $mdDialog, $timeout, SPRunningService){
 
 	$scope.categories = Category.get(); // gets all categories
 
@@ -313,9 +334,8 @@ angular.module('strateGISApp.controllers', ['ngMaterial', 'ngMessages']).control
 	
 }).controller('StoredProcedureUpdateCategoryLayersController',function($scope,$state,$stateParams,StoredProcedures, Category, $mdDialog, SPRunningService){
 
-	
 	$scope.categories = Category.get(); // gets all categories
-	$scope.recalculateLayers = true;
+	$scope.recalculateLayers = false;
 	
 	var userStateUpdateCategory= new Object();
 	$scope.userStateUpdateCategory = userStateUpdateCategory;
@@ -367,6 +387,11 @@ angular.module('strateGISApp.controllers', ['ngMaterial', 'ngMessages']).control
 	
 	var userStateOutputTableName= '';
 	$scope.userStateOutputTableName = userStateOutputTableName;
+
+	var userStateUpdateCategory= new Object();
+	$scope.userStateUpdateCategory = userStateUpdateCategory;
+
+	$scope.categories = Category.get();
 	
 	$scope.executeCheckinNewAnalysisLayer = function(){
 		SPRunningService.setRunning(true);
@@ -383,6 +408,7 @@ angular.module('strateGISApp.controllers', ['ngMaterial', 'ngMessages']).control
 		paramForSp.FeatureClassName =  $scope.userStateOriginaldata;
 		paramForSp.FIdFieldName  = SettingService.getSettings().FIdFieldName;
 		paramForSp.GeomFieldName = SettingService.getSettings().GeomFieldName;
+		paramForSp.categoryId = $scope.userStateUpdateCategory.id;
 	
 		$state.go('storedProcedures');
 	
@@ -443,8 +469,40 @@ angular.module('strateGISApp.controllers', ['ngMaterial', 'ngMessages']).control
 		);
 		
 	}
-})
-
+}).controller('StoredProceduresUpdateAllCategoriesController',function($scope,$state,$stateParams,StoredProcedures, $mdDialog, $timeout, SPRunningService){
+	
+		$scope.executeUpdateAllCategories = function(){
+				SPRunningService.setRunning(true);
+				var paramForSp = new Object();
+				
+				StoredProcedures.execute({spName: 'sp_UpdateAllCategories'}, paramForSp, function(){
+					console.log("sp done.");
+					SPRunningService.setRunning(false);
+					$state.reload(); 
+				}, function(){
+					console.log("sp failed.");
+					SPRunningService.setRunning(false);
+					$state.reload(); 
+				}
+				
+				);
+				$state.go('storedProcedures');
+		}
+	}).config(function($mdThemingProvider) {
+		var geopartnerRedMap = $mdThemingProvider.extendPalette('red', {
+		'500': '#D53A0E',
+		});
+		  
+		var geopartnerGreyMap = $mdThemingProvider.extendPalette('grey', {
+		'500': '#ECECEC',
+		});
+	
+		$mdThemingProvider.definePalette('geopartnerRed', geopartnerRedMap);
+		$mdThemingProvider.definePalette('geopartnerGrey', geopartnerGreyMap);
+	
+		$mdThemingProvider.theme('default')
+			.primaryPalette('geopartnerRed')
+			.backgroundPalette('geopartnerGrey');	
+	})
 ;
 
-  

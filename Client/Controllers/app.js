@@ -105,5 +105,16 @@ angular.module('strateGISApp').config(function($stateProvider) {
   }).state('spCheckinNewIntersectionLayer', { // Stored procedure state
     templateUrl: 'client/partials/spCheckinNewIntersectionLayer.html',
     controller: 'StoredProceduresCheckinNewIntersectionLayerController'
+  }).state('spUpdateAllCategories', { // Stored procedure state
+    templateUrl: 'client/partials/spUpdateAllCategories.html',
+    controller: 'StoredProceduresUpdateAllCategoriesController'
   });
+});
+
+angular.module('strateGISApp').config(function($stateProvider) {
+  $stateProvider.state('info', { // state for showing category_definition_rules
+    url: '/info',
+    templateUrl: 'client/partials/info.html',
+    controller: 'InfoController'
+  })
 });

@@ -1,14 +1,12 @@
-<a ui-sref="newRule" class="btn-primary btn-lg nodecoration">Add New Rule</a>
+<md-button ui-sref="newRule" class="md-raised md-primary">Add New Rule</md-button>
 
 <h2 class="md-title">Rules</h2>
 
 <table class="table">
 	<tr> 
-        <td><b>Id</b></td>
 		<td><b>Rule Name</b></td>
     </tr>
 	<tr ng-repeat="rule in rules.recordset" > 
-        <td>{{rule.id}}</td>
 		<td>{{rule.rule_name}}</td>
 		<td>
 			<md-button class="md-icon-button" aria-label="Edit" ui-sref="editRule({ruleId:rule.id})">

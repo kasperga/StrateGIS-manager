@@ -24,8 +24,19 @@
 			  </md-input-container>
 			</div>
 			
+			<div layout-gt-xs="row">
+				<md-input-container class="md-block">
+					<label>Category</label>
+					<md-select ng-model="userStateUpdateCategory" required>
+						<md-option ng-repeat="category in categories.recordset" ng-value="category">
+							{{category.category_name}}
+						</md-option>
+					</md-select>
+				</md-input-container>
+			</div>
+
 			<div>
-				<md-button type="submit" class="md-raised md-primary" value="Save">Submit</md-button>
+				<md-button type="submit" class="md-raised md-primary" value="Save">Run</md-button>
 			</div>
 		</div>
 	</div>
