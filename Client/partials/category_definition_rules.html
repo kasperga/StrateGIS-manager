@@ -5,24 +5,27 @@
 <table class="table">
 	<tr> 
 		<td><b>Category Definition</b></td>
-		<td><b>Rule</b></td>
-		<td><b>Weight</b></td>
-		<td><b>Intersect Layer</b></td>
+		<td title="Name of rule used for this Category Definition Rule."><b>Rule</b></td>
+		<td title="Multiplier to weight according to selected rule."><b>Weight</b></td>
+		<td title="Only applies to sp_intersectRule. Specifies the intersection layer."><b>Intersect Layer</b></td>
     </tr>
 	<tr ng-repeat="category_definition_rules in category_definition_rulesList.recordset"> 
-		<td>{{category_definition_rules.category_definition_id}}</td>
-		<td>{{category_definition_rules.rules_id}}</td>
-		<td>{{category_definition_rules.rule_argument1}}</td>
-		<td>{{category_definition_rules.rule_argument2}}</td>
+		<td>{{category_definition_rules.layer_name}}/{{category_definition_rules.output_layer_name}}</td>
+		<td title="Name of rule used for this Category Definition Rule.">{{category_definition_rules.rule_name}}</td>
+		<td title="Multiplier to weight according to selected rule.">{{category_definition_rules.rule_argument1}}</td>
+		<td title="Only applies to sp_intersectRule. Specifies the intersection layer.">{{category_definition_rules.rule_argument2}}</td>
 		<td>
 			<md-button class="md-icon-button" aria-label="Edit" ui-sref="editCategory_definition_rules({category_definition_rulesId:category_definition_rules.id})">
 				<md-icon md-svg-icon="/client/icons/pencil.svg"></md-icon>
+				<md-tooltip>Edit</md-tooltip>
 			</md-button>
-			<md-button class="md-icon-button" aria-label="View" ui-sref="viewCategory_definition_rules({category_definition_rulesId:category_definition_rules.id})"">
+			<md-button class="md-icon-button" aria-label="View" ui-sref="viewCategory_definition_rules({category_definition_rulesId:category_definition_rules.id})">
 				<md-icon md-svg-icon="/client/icons/eye.svg"></md-icon>
+				<md-tooltip>View</md-tooltip>
 			</md-button>
             <md-button class="md-icon-button" aria-label="Delete" ng-click="deleteCategory_definition_rules(category_definition_rules)">
 				<md-icon md-svg-icon="/client/icons/x.svg"></md-icon>
+				<md-tooltip>Delete</md-tooltip>
 			</md-button>
         </td>
     </tr>

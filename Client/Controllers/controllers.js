@@ -112,6 +112,54 @@ angular.module('strateGISApp.controllers', ['ngMaterial', 'ngMessages']).control
   };
 
   $scope.loadRule(); // Load a category which can be edited on UI
+}).controller('waitCDRChangesController',function($mdDialog, $rootScope, $scope,$state,SPRunningService,StoredProcedures){
+	
+	// there ere a change to CDR, now run 3 stored procedures
+
+	var vm = this;
+
+	SPRunningService.setRunning(true);
+	var paramForSp = new Object();
+	
+	StoredProcedures.execute({spName: 'sp_UpdateCategory'}, paramForSp, function(){
+		vm.determinateValue = 30;
+		console.log("sp 1/3 done.");
+
+		StoredProcedures.execute({spName: 'sp_UpdateCategoryLayers'}, paramForSp, function(){
+			console.log("sp 2/3 done.");
+			vm.determinateValue = 60;
+			
+			StoredProcedures.execute({spName: 'sp_UpdateAllCategories'}, paramForSp, function(){
+				SPRunningService.setRunning(false);
+				vm.determinateValue = 100;
+				console.log("sp 3/3 done.");
+				$mdDialog.hide();
+				$state.go('category_definition_rulesList'); 			
+			}, function(){
+					console.log("sp 3 failed.");
+					SPRunningService.setRunning(false);
+					$mdDialog.hide();
+					$state.go('category_definition_rulesList');
+				}
+			);
+
+		}, function(){
+				console.log("sp 2 failed.");
+				SPRunningService.setRunning(false);
+				$mdDialog.hide();
+				$state.go('category_definition_rulesList');
+			}
+		);
+
+	}, function(){
+		console.log("sp 1 failed.");
+		SPRunningService.setRunning(false);
+		$mdDialog.hide();
+		$state.go('category_definition_rulesList'); 
+	}
+	
+	);
+	
 }).controller('Category_definition_rulesListController', function($scope, $state, popupService, $window, Category_definition_rules) {
 
 	$scope.category_definition_rulesList = Category_definition_rules.get(); //fetch all categories.
@@ -136,9 +184,7 @@ angular.module('strateGISApp.controllers', ['ngMaterial', 'ngMessages']).control
 	$scope.category_definition_rules = fromJson[0];	
 	});
 
-}).controller('Category_definition_rulesCreateController',function($scope,$state,$stateParams,Category_definition_rules, Rule, Category_definition,SettingService){
-	console.log(SettingService.getSettings().minWeight);
-	console.dir(SettingService.getSettings());
+}).controller('Category_definition_rulesCreateController',function($mdDialog, $rootScope,$scope,$state,$stateParams,Category_definition_rules, Rule, Category_definition,SettingService){
 	$scope.minWeight = SettingService.getSettings().minWeight;
 	$scope.maxWeight = SettingService.getSettings().maxWeight;
 	//$scope.category_definition_rules.rule_argument1 = SettingService.standardWeight;
@@ -152,18 +198,49 @@ angular.module('strateGISApp.controllers', ['ngMaterial', 'ngMessages']).control
 
     $scope.addCategory_definition_rules=function(){
         Category_definition_rules.save({method: "add"}, $scope.category_definition_rules, function(){
-            $state.go('category_definition_rulesList');
+			$mdDialog.show({
+				controller: 'waitCDRChangesController',
+				template: '<md-dialog id="plz_wait" style="background-color:transparent;box-shadow:none;height: 100%">' +
+							'<div layout="row" layout-sm="column" layout-align="center center" aria-label="wait">' +
+								'<md-progress-circular md-mode="determinate" value="{{vm.determinateValue}}></md-progress-circular>' +
+							'</div>' +
+						'</md-dialog>',
+				parent: angular.element(document.body),
+				clickOutsideToClose:false,
+				fullscreen: false,
+				escapeToClose: false
+			})
+			.then(function(answer) {
+				$state.go('storedProcedures');
+			});
+            //$state.go('category_definition_rulesList');
         });
     }
 
-}).controller('Category_definition_rulesEditController',function($scope,$state,$stateParams,Category_definition_rules, Rule, Category_definition,SettingService){
+}).controller('Category_definition_rulesEditController',function($mdDialog, $rootScope,$scope,$state,$stateParams,Category_definition_rules, Rule, Category_definition,SettingService){
 	$scope.minWeight = SettingService.minWeight;
 	$scope.maxWeight = SettingService.maxWeight;
 
     $scope.updateCategory_definition_rules=function(){
 		if($scope.cdrForm.$valid){
 			Category_definition_rules.update({method: 'update'}, $scope.category_definition_rules, function(){
-				$state.go('category_definition_rulesList');
+				$mdDialog.show({
+					controller: 'waitCDRChangesController',
+					template: '<md-dialog id="plz_wait" style="background-color:transparent;box-shadow:none;height: 100%">' +
+								'<div layout="row" layout-sm="column" layout-align="center center" aria-label="wait">' +
+									'<md-progress-circular md-mode="indeterminate" ></md-progress-circular>' +
+								'</div>' +
+							'</md-dialog>',
+					parent: angular.element(document.body),
+					clickOutsideToClose:false,
+					fullscreen: false,
+					escapeToClose: false
+				})
+				.then(function(answer) {
+					$state.go('storedProcedures');
+				});
+
+				//$state.go('category_definition_rulesList');
 			});
 		}
     };
@@ -299,76 +376,152 @@ angular.module('strateGISApp.controllers', ['ngMaterial', 'ngMessages']).control
 	
 		$scope.serverSettings = ServerSetting.get();	
 		
+	}).controller('waitStoredProcedureUpdateCategoryCtrl',function($mdDialog, $rootScope, $scope,$state,SPRunningService,StoredProcedures,categoryName){
+		
+		var vm = this;
+
+		SPRunningService.setRunning(true);
+		var paramForSp = new Object();
+		paramForSp.CategoryName = categoryName;
+
+		StoredProcedures.execute({spName: 'sp_UpdateCategory'}, paramForSp, function(){
+			console.log("sp done.");
+			SPRunningService.setRunning(false);
+			$mdDialog.hide();
+			$state.reload(); 
+		}, function(){
+			console.log("sp failed.");
+			SPRunningService.setRunning(false);
+			$mdDialog.hide();
+			$state.reload(); 
+		}
+		
+		);
+			
 	}).controller('StoredProcedureUpdateCategoryController',function($scope,$state,$stateParams,StoredProcedures, Category, $mdDialog, $timeout, SPRunningService){
 
 	$scope.categories = Category.get(); // gets all categories
 
 	var userStateUpdateCategory= new Object();
 	$scope.userStateUpdateCategory = userStateUpdateCategory;
-	
-	
+
 	$scope.executeUpdateCategory = function(){
-		//if(cdrForm.$valid){
-			SPRunningService.setRunning(true);
-			var paramForSp = new Object();
-			paramForSp.CategoryName = $scope.userStateUpdateCategory.category_name;
-			
-			  
-			
-			StoredProcedures.execute({spName: 'sp_UpdateCategory'}, paramForSp, function(){
-				console.log("sp done.");
-				SPRunningService.setRunning(false);
-				$state.reload(); 
-			}, function(){
-				console.log("sp failed.");
-				SPRunningService.setRunning(false);
-
-				$state.reload(); 
+	//if(cdrForm.$valid){
+		$mdDialog.show({
+			controller: 'waitStoredProcedureUpdateCategoryCtrl',
+			template: '<md-dialog id="plz_wait" style="background-color:transparent;box-shadow:none;height: 100%">' +
+						'<div layout="row" layout-sm="column" layout-align="center center" aria-label="wait">' +
+							'<md-progress-circular md-mode="indeterminate" ></md-progress-circular>' +
+						'</div>' +
+					'</md-dialog>',
+			parent: angular.element(document.body),
+			clickOutsideToClose:false,
+			fullscreen: false,
+			escapeToClose: false,
+			locals: {
+				categoryName: $scope.userStateUpdateCategory.category_name
 			}
-			
-			);
-			$state.go('storedProcedures');
 
+		})
+		.then(function(answer) {
+			$state.go('storedProcedures');
+		});
 	}
+
+}).controller('waitStoredProcedureUpdateCategoryLayersCtrl',function($mdDialog, $rootScope, $scope,$state,SPRunningService,StoredProcedures,categoryName,recalculateLayers){
 	
+	var vm = this;
 	
+	$scope.running = true;
+
+	SPRunningService.setRunning(true);
+	var paramForSp = new Object();
+	paramForSp.CategoryName = categoryName;
+	if(recalculateLayers == true){
+		paramForSp.RecalculateLayers = 1;
+	}
+	else
+	{
+		paramForSp.RecalculateLayers = 0;
+	}		
+
+	StoredProcedures.execute({spName: 'sp_UpdateCategoryLayers'}, paramForSp, function(){
+		console.log("sp done.");
+		SPRunningService.setRunning(false);
+		$mdDialog.hide();
+		$state.reload(); 
+	}, function(){
+			console.log("sp failed.");
+			SPRunningService.setRunning(false);
+			$mdDialog.hide();
+			$state.reload(); 
+		}
+	);
+		
 }).controller('StoredProcedureUpdateCategoryLayersController',function($scope,$state,$stateParams,StoredProcedures, Category, $mdDialog, SPRunningService){
 
 	$scope.categories = Category.get(); // gets all categories
 	$scope.recalculateLayers = false;
-	
+
 	var userStateUpdateCategory= new Object();
 	$scope.userStateUpdateCategory = userStateUpdateCategory;
-	
-	$scope.running = true;
-	$scope.executeUpdateCategoryLayers = function(){
-		SPRunningService.setRunning(true);
-		var paramForSp = new Object();
-		paramForSp.CategoryName = $scope.userStateUpdateCategory.category_name;
-		if($scope.recalculateLayers == true){
-			paramForSp.RecalculateLayers = 1;
-		}
-		else
-		{
-			paramForSp.RecalculateLayers = 0;
-		}
-		
-		
-	
-		StoredProcedures.execute({spName: 'sp_UpdateCategoryLayers'}, paramForSp, function(){
-			console.log("sp done.");
-			SPRunningService.setRunning(false);
-			$state.reload(); 
-		}, function(){
-				console.log("sp failed.");
-				SPRunningService.setRunning(false);
 
-				$state.reload(); 
+	$scope.executeUpdateCategoryLayers = function(){
+		$mdDialog.show({
+			controller: 'waitStoredProcedureUpdateCategoryLayersCtrl',
+			template: '<md-dialog id="plz_wait" style="background-color:transparent;box-shadow:none;height: 100%">' +
+						'<div layout="row" layout-sm="column" layout-align="center center" aria-label="wait">' +
+							'<md-progress-circular md-mode="indeterminate" ></md-progress-circular>' +
+						'</div>' +
+					'</md-dialog>',
+			parent: angular.element(document.body),
+			clickOutsideToClose:false,
+			fullscreen: false,
+			escapeToClose: false,
+			locals: {
+				categoryName: $scope.userStateUpdateCategory.category_name,
+				recalculateLayers: $scope.recalculateLayers
 			}
-		);
-		$state.go('storedProcedures');
-		
+		})
+		.then(function(answer) {
+			$state.go('storedProcedures');
+		});
 	}
+}).controller('waitStoredProcedureCheckinNewAnalysisLayerController',function($mdDialog, $rootScope, $scope,$state,SPRunningService,StoredProcedures,SettingService,RecalculateFeatures,OutputTableName,FeatureClassName,categoryId){
+	
+	var vm = this;
+
+	SPRunningService.setRunning(true);
+	var paramForSp = new Object();
+	if(RecalculateFeatures){
+		paramForSp.RecalculateFeatures = 1;
+	}
+	else
+	{
+		paramForSp.RecalculateFeatures = 0;
+	}
+	
+	paramForSp.OutputTableName = OutputTableName;
+	paramForSp.FeatureClassName =  FeatureClassName;
+	paramForSp.FIdFieldName  = SettingService.getSettings().FIdFieldName;
+	paramForSp.GeomFieldName = SettingService.getSettings().GeomFieldName;
+	paramForSp.categoryId = categoryId;
+
+	$state.go('storedProcedures');
+
+	StoredProcedures.execute({spName: 'sp_CalculateLayer'}, paramForSp, function(){
+		SPRunningService.setRunning(false);
+		console.log("sp done.");
+		$mdDialog.hide();
+		$state.reload(); 			
+	}, function(){
+			console.log("sp failed.");
+			SPRunningService.setRunning(false);
+			$mdDialog.hide();
+			$state.reload(); 
+		}
+	);
+		
 }).controller('StoredProceduresCheckinNewAnalysisLayerController',function($scope,$state,$stateParams,StoredProcedures, Category, $mdDialog, SettingService, SPRunningService){
 
 	/*
@@ -394,37 +547,61 @@ angular.module('strateGISApp.controllers', ['ngMaterial', 'ngMessages']).control
 	$scope.categories = Category.get();
 	
 	$scope.executeCheckinNewAnalysisLayer = function(){
-		SPRunningService.setRunning(true);
-		var paramForSp = new Object();
-		if($scope.recalculateLayers){
-			paramForSp.RecalculateFeatures = 1;
-		}
-		else
-		{
-			paramForSp.RecalculateFeatures = 0;
-		}
-		
-		paramForSp.OutputTableName = $scope.userStateOutputTableName;
-		paramForSp.FeatureClassName =  $scope.userStateOriginaldata;
-		paramForSp.FIdFieldName  = SettingService.getSettings().FIdFieldName;
-		paramForSp.GeomFieldName = SettingService.getSettings().GeomFieldName;
-		paramForSp.categoryId = $scope.userStateUpdateCategory.id;
-	
-		$state.go('storedProcedures');
-	
-		StoredProcedures.execute({spName: 'sp_CalculateLayer'}, paramForSp, function(){
-			SPRunningService.setRunning(false);
-			console.log("sp done.");
-			$state.reload(); 			
-		}, function(){
-				console.log("sp failed.");
-				SPRunningService.setRunning(false);
-
-				$state.reload(); 
+		$mdDialog.show({
+			controller: 'waitStoredProcedureCheckinNewAnalysisLayerController',
+			template: '<md-dialog id="plz_wait" style="background-color:transparent;box-shadow:none;height: 100%">' +
+						'<div layout="row" layout-sm="column" layout-align="center center" aria-label="wait">' +
+							'<md-progress-circular md-mode="indeterminate" ></md-progress-circular>' +
+						'</div>' +
+					'</md-dialog>',
+			parent: angular.element(document.body),
+			clickOutsideToClose:false,
+			fullscreen: false,
+			escapeToClose: false,
+			locals: {
+				OutputTableName: $scope.userStateOutputTableName,
+				FeatureClassName:  $scope.userStateOriginaldata,
+				categoryId: $scope.userStateUpdateCategory.id,
+				RecalculateFeatures: $scope.recalculateLayers
 			}
-		);
-		
+		})
+		.then(function(answer) {
+			$state.go('storedProcedures');
+		});
 	}
+}).controller('waitStoredProcedureCheckinNewIntersectionLayerController',function($mdDialog, $rootScope, $scope,$state,SPRunningService,StoredProcedures,SettingService,RecalculateFeatures,userStateTable){
+	
+	var vm = this;
+
+	SPRunningService.setRunning(true);
+	var paramForSp = new Object();
+	if(RecalculateFeatures){
+		paramForSp.RecalculateFeatures = 1;
+	}
+	else
+	{
+		paramForSp.RecalculateFeatures = 0;
+	}
+	
+	paramForSp.OutputTableName = userStateTable + "_intersect";;
+	paramForSp.FeatureClassName =  userStateTable;
+	paramForSp.FIdFieldName  = SettingService.getSettings().FIdFieldName;
+	paramForSp.GeomFieldName = SettingService.getSettings().GeomFieldName;
+
+
+	StoredProcedures.execute({spName: 'sp_CalculateLayer'}, paramForSp, function(){
+		SPRunningService.setRunning(false);
+		console.log("sp done.");
+		$mdDialog.hide();
+		$state.reload(); 			
+	}, function(){
+			console.log("sp failed.");
+			SPRunningService.setRunning(false);
+			$mdDialog.hide();
+			$state.reload(); 
+		}
+	);
+		
 }).controller('StoredProceduresCheckinNewIntersectionLayerController',function($scope,$state,$stateParams,StoredProcedures, Category, $mdDialog, SettingService, SPRunningService){
 
 /*
@@ -439,54 +616,65 @@ angular.module('strateGISApp.controllers', ['ngMaterial', 'ngMessages']).control
 	$scope.userStateTable = userStateTable;
 	
 	$scope.executeCheckinNewIntersectionLayer = function(){
-		SPRunningService.setRunning(true);
-		var paramForSp = new Object();
-		if($scope.recalculateLayers){
-			paramForSp.RecalculateFeatures = 1;
-		}
-		else
-		{
-			paramForSp.RecalculateFeatures = 0;
-		}
-		
-		paramForSp.OutputTableName = $scope.userStateTable + "_intersect";
-		paramForSp.FeatureClassName =  $scope.userStateTable;
-		paramForSp.FIdFieldName  = SettingService.getSettings().FIdFieldName;
-		paramForSp.GeomFieldName = SettingService.getSettings().GeomFieldName;
-	
-		$state.go('storedProcedures');
-	
-		StoredProcedures.execute({spName: 'sp_CalculateLayer'}, paramForSp, function(){
-			SPRunningService.setRunning(false);
-			console.log("sp done.");
-			$state.reload(); 
-		}, function(){
-				console.log("sp failed.");
-				SPRunningService.setRunning(false);
-
-				$state.reload(); 
+		$mdDialog.show({
+			controller: 'waitStoredProcedureCheckinNewIntersectionLayerController',
+			template: '<md-dialog id="plz_wait" style="background-color:transparent;box-shadow:none;height: 100%">' +
+						'<div layout="row" layout-sm="column" layout-align="center center" aria-label="wait">' +
+							'<md-progress-circular md-mode="indeterminate" ></md-progress-circular>' +
+						'</div>' +
+					'</md-dialog>',
+			parent: angular.element(document.body),
+			clickOutsideToClose:false,
+			fullscreen: false,
+			escapeToClose: false,
+			locals: {
+				userStateTable: $scope.userStateTable,
+				RecalculateFeatures: $scope.recalculateLayers
 			}
-		);
+		})
+		.then(function(answer) {
+			$state.go('storedProcedures');
+		});
 		
 	}
+}).controller('waitStoredProcedureUpdateAllCategoriesController',function($mdDialog, $rootScope, $scope,$state,SPRunningService,StoredProcedures){
+	
+	var vm = this;
+
+	SPRunningService.setRunning(true);
+	var paramForSp = new Object();
+	
+	StoredProcedures.execute({spName: 'sp_UpdateAllCategories'}, paramForSp, function(){
+		SPRunningService.setRunning(false);
+		console.log("sp done.");
+		$mdDialog.hide();
+		$state.reload(); 			
+	}, function(){
+			console.log("sp failed.");
+			SPRunningService.setRunning(false);
+			$mdDialog.hide();
+			$state.reload(); 
+		}
+	);
+		
 }).controller('StoredProceduresUpdateAllCategoriesController',function($scope,$state,$stateParams,StoredProcedures, $mdDialog, $timeout, SPRunningService){
 	
 		$scope.executeUpdateAllCategories = function(){
-				SPRunningService.setRunning(true);
-				var paramForSp = new Object();
-				
-				StoredProcedures.execute({spName: 'sp_UpdateAllCategories'}, paramForSp, function(){
-					console.log("sp done.");
-					SPRunningService.setRunning(false);
-					$state.reload(); 
-				}, function(){
-					console.log("sp failed.");
-					SPRunningService.setRunning(false);
-					$state.reload(); 
-				}
-				
-				);
+			$mdDialog.show({
+				controller: 'waitStoredProcedureUpdateAllCategoriesController',
+				template: '<md-dialog id="plz_wait" style="background-color:transparent;box-shadow:none;height: 100%">' +
+							'<div layout="row" layout-sm="column" layout-align="center center" aria-label="wait">' +
+								'<md-progress-circular md-mode="indeterminate" ></md-progress-circular>' +
+							'</div>' +
+						'</md-dialog>',
+				parent: angular.element(document.body),
+				clickOutsideToClose:false,
+				fullscreen: false,
+				escapeToClose: false
+			})
+			.then(function(answer) {
 				$state.go('storedProcedures');
+			});
 		}
 	}).config(function($mdThemingProvider) {
 		var geopartnerRedMap = $mdThemingProvider.extendPalette('red', {

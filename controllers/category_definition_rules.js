@@ -6,7 +6,8 @@ exports.getList = function (req, resp, edit) {
     var url = require('url');
     var url_parts = url.parse(req.url.toLowerCase(), true);
     var query = url_parts.query;
-    db.executeSql("SELECT * FROM category_definition_rules", function (data, err) {
+    db.executeSql("SELECT category_definition_rules.id, category_definition_rules.category_definition_id,category_definition_rules.rules_id,category_definition_rules.rule_argument1,category_definition_rules.rule_argument2,rules.rule_name,category_definition.layer_name,category_definition.output_layer_name FROM category_definition_rules INNER JOIN rules on category_definition_rules.rules_id = rules.id INNER JOIN category_definition on category_definition_rules.category_definition_id = category_definition.id", 
+    function (data, err) {
         if (err) {
             httpMsgs.show500(req, resp, err);
         }
