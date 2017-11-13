@@ -1,7 +1,7 @@
 angular.module('strateGISApp.controllers', ['ngMaterial', 'ngMessages']).controller('StartUpController',function($http,$scope,$stateParams,$state,SettingService){
 
     //$http.get('client/settings/app.config.json').then(function(dataRaw) {
-	$http.get('/settings/').then(function(dataRaw) {	
+	$http.get('/strategis/settings/').then(function(dataRaw) {	
 		var settings = SettingService.getSettings();
 		
 		settings.FIdFieldName = dataRaw.data.FIdFieldName;
@@ -112,23 +112,40 @@ angular.module('strateGISApp.controllers', ['ngMaterial', 'ngMessages']).control
   };
 
   $scope.loadRule(); // Load a category which can be edited on UI
-}).controller('waitCDRChangesController',function($mdDialog, $rootScope, $scope,$state,SPRunningService,StoredProcedures){
+}).controller('waitCDRChangesController',function($mdDialog, $rootScope, $scope,$state,SPRunningService,StoredProcedures,Category_definition,Category,categoryDefinitionId){
 	
-	// there ere a change to CDR, now run 3 stored procedures
+	// there were a change to CDR, now run 3 stored procedures
 
 	var vm = this;
 
 	SPRunningService.setRunning(true);
 	var paramForSp = new Object();
 	
-	StoredProcedures.execute({spName: 'sp_UpdateCategory'}, paramForSp, function(){
-		vm.determinateValue = 30;
-		console.log("sp 1/3 done.");
+	// however first we find category information by first finding categoryDefinition then the actual category
+	// then run the 3 SPs
+	
+	var result = Category_definition.get({id: categoryDefinitionId, method: 'id'}, function(categoryDefinitionFromId){
 
-		StoredProcedures.execute({spName: 'sp_UpdateCategoryLayers'}, paramForSp, function(){
-			console.log("sp 2/3 done.");
-			vm.determinateValue = 60;
-			
+	var fromJson = angular.fromJson(categoryDefinitionFromId.recordset);
+	$scope.category_definition = fromJson[0];	
+	
+	
+	Category.get({id: $scope.category_definition.category_id, method: 'id'}, function(categoryFromId){
+
+	var fromJson = angular.fromJson(categoryFromId.recordset);
+	$scope.category = fromJson[0];
+	paramForSp.CategoryName = $scope.category.category_name;
+	paramForSp.RecalculateLayers = 0; // per default we do not recalculate the layers.
+	
+
+	StoredProcedures.execute({spName: 'sp_UpdateCategoryLayers'}, paramForSp, function(){
+			console.log("sp 1/3 done.");
+			vm.determinateValue = 30;
+	
+			StoredProcedures.execute({spName: 'sp_UpdateCategory'}, paramForSp, function(){
+				vm.determinateValue = 60;
+				console.log("sp 2/3 done.");
+
 			StoredProcedures.execute({spName: 'sp_UpdateAllCategories'}, paramForSp, function(){
 				SPRunningService.setRunning(false);
 				vm.determinateValue = 100;
@@ -159,6 +176,8 @@ angular.module('strateGISApp.controllers', ['ngMaterial', 'ngMessages']).control
 	}
 	
 	);
+	});
+	});
 	
 }).controller('Category_definition_rulesListController', function($scope, $state, popupService, $window, Category_definition_rules) {
 
@@ -194,8 +213,6 @@ angular.module('strateGISApp.controllers', ['ngMaterial', 'ngMessages']).control
 	$scope.rules = Rule.get();
 	$scope.definitions = Category_definition.get();
 
-
-
     $scope.addCategory_definition_rules=function(){
         Category_definition_rules.save({method: "add"}, $scope.category_definition_rules, function(){
 			$mdDialog.show({
@@ -208,10 +225,13 @@ angular.module('strateGISApp.controllers', ['ngMaterial', 'ngMessages']).control
 				parent: angular.element(document.body),
 				clickOutsideToClose:false,
 				fullscreen: false,
-				escapeToClose: false
+				escapeToClose: false,
+				locals: {
+					categoryDefinitionId: $scope.userStateUpdateCategory.category_definition_id
+				}
 			})
 			.then(function(answer) {
-				$state.go('storedProcedures');
+				$state.go('category_definition_rulesList');
 			});
             //$state.go('category_definition_rulesList');
         });
@@ -234,10 +254,13 @@ angular.module('strateGISApp.controllers', ['ngMaterial', 'ngMessages']).control
 					parent: angular.element(document.body),
 					clickOutsideToClose:false,
 					fullscreen: false,
-					escapeToClose: false
+					escapeToClose: false,
+				locals: {
+					categoryDefinitionId: $scope.category_definition_rules.category_definition_id
+				}
 				})
 				.then(function(answer) {
-					$state.go('storedProcedures');
+					$state.go('category_definition_rulesList');
 				});
 
 				//$state.go('category_definition_rulesList');
