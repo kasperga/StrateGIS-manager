@@ -1,4 +1,4 @@
-﻿var db = require("../db/dbconnection");
+var db = require("../db/dbconnection");
 var httpMsgs = require("../core/httpMsgs");
 var util = require("util");
 
@@ -108,7 +108,8 @@ exports.update = function (req, resp, reqBody) {
             
             var isDataProvided = false;
             var isrule_argument1Provided = false;
-            if (data.rule_argument1) { 
+
+            if (typeof data.rule_argument1 !== 'undefined') { 
                 sql += "rule_argument1 = '" + data.rule_argument1 + "'";
                 isDataProvided = true;
                 isrule_argument1Provided = true;
