@@ -13,41 +13,72 @@
 </head>
 
 <body>
+
 <div>
-	<div ng-controller="AppCtrl" layout="row" layout-sm="column"  ng-cloak>
+	<div ng-controller="AppCtrl" layout="column" ng-cloak>
+		<div>
+			<md-content class="md-padding">
+				<div>
+					<md-toolbar class="md-hue-2" layout = "row" layout-align="start center">
+						<md-button class="md-icon-button md-button md-ink-ripple hide-gt-sm" aria-label="Menu" ng-click="toggleLeft()" hide-gt-sm="" focusable="false">
+							<md-icon md-svg-icon="/client/icons/menu.svg"></md-icon>
+						</md-button>	
+						<h1 layout-align="start center"> StrateGIS manager</h1>
+					</md-toolbar>
+				</div>
+				<div layout = "row" flex="none"  width="300px" height = "100%"> <!-- hide show-gt-sm -->
+					<md-sidenav
+					class="md-sidenav-left"
+					md-component-id="left"
+					md-is-locked-open="$mdMedia('gt-sm')"
+					md-whiteframe="4">
 
-		<div flex="none"  width="300px" height = "100%">
-			<md-sidenav
-				class="md-sidenav-left"
-				md-component-id="left"
-				md-is-locked-open="$mdMedia('gt-xs')"
-				md-disable-backdrop
-				md-whiteframe="4">
+						<div layout="column" layout-align="start stretch" role = "navigation">
+								<md-button ui-sref="categories" ng-click="toggleLeft()" class="md-raised md-primary">Categories</md-button>
+								<md-button ui-sref="category_definitionList" ng-click="toggleLeft()" class="md-raised md-primary">Category Definition</md-button>
+								<md-button ui-sref="category_definition_rulesList" ng-click="toggleLeft()" class="md-raised md-primary">Category Definition Rules</md-button>
+								<md-button ui-sref="rules" ng-click="toggleLeft()" class="md-raised md-primary">Rules</md-button>
+								<md-button ui-sref="storedProcedures" ng-click="toggleLeft()" class="md-raised md-primary">Functions</md-button>
+								<md-button ui-sref="info" ng-click="toggleLeft()" class="md-raised md-primary">Information</md-button>
+						</div>
+					</md-sidenav>
+					<div layout-align="start start">
+							<md-content layout-padding>
+							<div ui-view></div>
+							</md-content>
+					</div> 
+					<!--
+					<md-nav-bar
+					md-no-ink-bar="disableInkBar"
+					md-selected-nav-item="currentNavItem"
+					nav-bar-aria-label="navigation links">
 
-			  <md-toolbar layout ="row">
-				<h1 class="md-toolbar-tools">StrateGIS manager</h1>
-				<md-button ui-sref="info" class="md-fab md-mini md-primary" aria-label="More">
-					<md-icon md-svg-src="/client/icons/info.svg" style="color: greenyellow;"></md-icon>
-				</md-button>
-			  </md-toolbar>
-			  <md-content flex role = "navigation" layout-padding ng-controller="LeftCtrl">				
-			  </md-content>
-			  <div layout="column" layout-align="center stretch" role = "navigation">
-				   <md-button ui-sref="categories" class="md-raised md-primary">Categories</md-button>
-				   <md-button ui-sref="category_definitionList" class="md-raised md-primary">Category Definition</md-button>
-				   <md-button ui-sref="category_definition_rulesList" class="md-raised md-primary">Category Definition Rules</md-button>
-				   <md-button ui-sref="rules" class="md-raised md-primary">Rules</md-button>
-				   <md-button ui-sref="storedProcedures" class="md-raised md-primary">Functions</md-button>
-			  </div>
-			</md-sidenav>
-		</div>
+						<md-nav-item md-nav-sref="categories" name="category">
+								Category
+						</md-nav-item>
+						<md-nav-item md-nav-sref="category_definitionList" name="categoryDefinition">
+								Category Definition
+						</md-nav-item>
+						<md-nav-item md-nav-sref="category_definition_rulesList" name="categoryDefinitionRules">
+								Category Definition Rules
+						</md-nav-item>
+						<md-nav-item md-nav-sref="rules" name="rules">
+								Rules
+						</md-nav-item>
+						<md-nav-item md-nav-sref="storedProcedures" name="functions">
+								Functions
+						</md-nav-item>
+						<md-nav-item md-nav-sref="info" name="Info">
+								Info
+						</md-nav-item>
 
-		<div flex flex="66" flex-offset="5" layout-align="start center">
-			<md-content layout-padding>
-			<div ui-view></div>
+					</md-nav-bar>
+					-->
 
+
+				</div>
 			</md-content>
-		</div> 
+		</div>	
 	</div>
 </div>
 	
@@ -63,5 +94,5 @@
 	<script type="text/javascript" src="/node_modules/angular-aria/angular-aria.min.js"></script>
 	<script type="text/javascript" src="/node_modules/angular-animate/angular-animate.min.js"></script>
 	<script type="text/javascript" src="/node_modules/angular-messages/angular-messages.min.js"></script>
-</body>
+	</body>
 </html>

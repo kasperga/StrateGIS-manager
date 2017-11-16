@@ -1,38 +1,52 @@
 <h2 class="md-title">Execute a stored procedure</h2>
 
-<section layout="row" layout-sm="column" layout-align="start center" layout-align-sm="start start" ng-controller="StoredProceduresController as ctrl" layout-wrap>
-	<md-button class="md-raised md-primary" ui-sref="spUpdateCategoryLayers" ng-disabled="running">
-		<md-tooltip>This procedure will calculate one single layer.  
-				All rules for each layer will be applied in order to update the property feature_score. 
-		</md-tooltip>
-		Update Category Layers
-	</md-button>
-	<md-button class="md-raised md-primary" ui-sref="spUpdateCategory" ng-disabled="running">
-		<md-tooltip>  
-				Updates the complete content of the category, based on a summation of scores and overlaps from all layers assigned to this category.
-		</md-tooltip>
-		Update Category
-	</md-button>
-	<md-button class="md-raised md-primary" ui-sref="spCheckinNewAnalysisLayer" ng-disabled="running">
-		<md-tooltip> 
-				Checkin new analysis layer. When checked in, geometries is converted to the predefined square grid definition.
-		</md-tooltip>
-		Check-in new Analysis Layer
-	</md-button>
-	<md-button class="md-raised md-primary" ui-sref="spCheckinNewIntersectionLayer" ng-disabled="running">
-		<md-tooltip> 
-				Checkin new intersection layer. When checked in, geometries is converted to the predefined square grid definition.
-		</md-tooltip>
-		Check-in new intersection Layer
-	</md-button>
-	<md-button class="md-raised md-primary" ui-sref="spUpdateAllCategories" ng-disabled="running">
-		<md-tooltip> 
-				Updates the complete content of all categories, based on a summation of scores and overlaps from all layers assigned to a category.
-		</md-tooltip>
-		Update all categories
-	</md-button>	
-	
-</section>
+<md-content>
+		<md-list flex>
+			<md-list-item class="md-3-line md-long-text" ui-sref="spCheckinNewIntersectionLayer">
+					<md-icon md-svg-icon="/client/icons/calculator.svg"></md-icon>
+				<div class="md-list-item-text">
+					<h3>Check-in new intersection Layer</h3>
+					<p>Checkin new intersection layer. When checked in, geometries is converted to the predefined square grid definition.</p>
+				</div>
+				</md-list-item>
+				<md-divider ></md-divider>
+		  	<md-list-item class="md-3-line md-long-text" ui-sref="spCheckinNewAnalysisLayer">
+					<md-icon md-svg-icon="/client/icons/calculator.svg"></md-icon>
+				<div class="md-list-item-text">
+					<h3>Check-in new Analysis Layer</h3>
+					<p>Checkin new analysis layer. When checked in, geometries is converted to the predefined square grid definition. </p>
+				</div>
+				</md-list-item>
+				<md-divider ></md-divider>
+				<md-list-item class="md-3-line md-long-text" ui-sref="spUpdateAllCategories">
+					<md-icon md-svg-icon="/client/icons/calculator.svg"></md-icon>
+				<div class="md-list-item-text">
+					<h3>Update all categories</h3>
+					<p>Updates the complete content of all categories, based on a summation of scores and overlaps from all layers assigned to a category.</p>
+				</div>
+				</md-list-item>		   
+			<md-divider ></md-divider>		
+		  <md-list-item class="md-3-line md-long-text" ui-sref="spUpdateCategoryLayers">
+			<md-icon md-svg-icon="/client/icons/calculator.svg"></md-icon>
+			<div class="md-list-item-text">
+			  <h3>Update Category Layers</h3>
+			  <p>This procedure will calculate one single layer.  
+					All rules for each layer will be applied in order to update the property feature_score. </p>
+			</div>
+		  </md-list-item>
+		  	<md-divider ></md-divider>
+		  	<md-list-item class="md-3-line md-long-text" ui-sref="spUpdateCategory">
+					<md-icon md-svg-icon="/client/icons/calculator.svg"></md-icon>
+				<div class="md-list-item-text">
+					<h3>Update Category</h3>
+					<p>This procedure will calculate one single layer.  
+						Updates the complete content of the category, based on a summation of scores and overlaps from all layers assigned to this category. </p>
+				</div>
+		  	</md-list-item>
+		   
+		</md-list>
+	  </md-content>
+
 <br><br>
 <div>
 {{errorText}}	

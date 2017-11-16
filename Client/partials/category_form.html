@@ -18,6 +18,11 @@
 				<input ng-model="category.category_output_layer_name">
 			</md-input-container>
 		</div>
+		<md-input-container class="md-block">
+			<md-checkbox name="allCategories" ng-model="category.includeInAllCategories">
+				Include in all categories  Checkbox value: {{ category.includeInAllCategories }}
+			</md-checkbox>
+		</md-input-container>
 	</div>
 	<div>
 		<md-button type="submit" class="md-raised md-primary" value="Save">Submit</md-button>

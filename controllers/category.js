@@ -52,7 +52,7 @@ exports.add = function (req, resp, reqBody) {
             if (!data.category_name) throw new Error("Property category_name not found");
             if (!data.category_output_layer_name) throw new Error("Property category_output_layer_name not found");
             var sql = "INSERT INTO category (category_name, category_output_layer_name, includeInAllCategories) VALUES ";
-            sql += util.format("('%s', '%s', '%s') ", data.category_name, data.category_output_layer_name, '1');
+            sql += util.format("('%s', '%s', '%s') ", data.category_name, data.category_output_layer_name, data.includeInAllCategories);
             console.log("sql: " + sql);
             db.executeSql(sql, function (data, err) {
                 if (err) {
@@ -108,6 +108,14 @@ exports.update = function (req, resp, reqBody) {
                 if (iscategory_nameProvided)
                     sql += ", ";
                 sql += "category_output_layer_name = '" + data.category_output_layer_name + "'";
+                isDataProvided = true;
+            }
+            if (data.includeInAllCategories !== 'undefined') { 
+                console.log("contains include in all categories");
+                console.log(data.includeInAllCategories);
+                if (iscategory_nameProvided)
+                    sql += ", ";
+                sql += "includeInAllCategories = '" + data.includeInAllCategories + "'";
                 isDataProvided = true;
             }
             if (!isDataProvided) throw new Error("No data provided to update");

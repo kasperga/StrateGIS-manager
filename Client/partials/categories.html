@@ -7,17 +7,24 @@
 	<tr> 
 		<td><b>Name</b></td>
 		<td><b>Layer names</b></td>
+		<td><b>Include in all categories</b></td>
     </tr>
     <tr ng-repeat="category in categories.recordset"> 
 		<td>{{category.category_name}}</td>
 		<td>{{category.category_output_layer_name}}</td>
+		<td>{{category.includeInAllCategories}}</td>
+
 		<td>
-			<md-button class="md-icon-button" aria-label="Edit" ui-sref="editCategory({categoryId:category.id})"">
+			<md-button class="md-icon-button" aria-label="Edit" ui-sref="editCategory({categoryId:category.id})">
 				<md-icon md-svg-icon="/client/icons/pencil.svg"></md-icon>
 			</md-button>
+		</td>
+		<td>
 			<md-button class="md-icon-button" aria-label="View" ui-sref="viewCategory({categoryId:category.id})">
 				<md-icon md-svg-icon="/client/icons/eye.svg"></md-icon>
 			</md-button>
+		</td>
+		<td>
             <md-button class="md-icon-button" aria-label="Delete" ng-click="deleteCategory(category)">
 				<md-icon md-svg-icon="/client/icons/x.svg"></md-icon>
 			</md-button>

@@ -38,9 +38,11 @@ angular.module('strateGISApp.controllers', ['ngMaterial', 'ngMessages']).control
 
 }).controller('CategoryCreateController',function($scope,$state,$stateParams,Category){
 
-    $scope.category=new Category();
+	$scope.category=new Category();
+	$scope.category.includeInAllCategories = true;
 
     $scope.addCategory=function(){
+		console.log($scope.category);
         Category.save({method: "add"}, $scope.category, function(){
             $state.go('categories');
         });
@@ -57,7 +59,8 @@ angular.module('strateGISApp.controllers', ['ngMaterial', 'ngMessages']).control
     $scope.loadCategory = function() { //Issues a GET request to /category/:id to get a category to update
     var result = Category.get({id: $stateParams.categoryId, method: 'id'}, function(myVar){
 	var fromJson = angular.fromJson(myVar.recordset);
-	$scope.category = fromJson[0];	
+	$scope.category = fromJson[0];
+	console.dir($scope.category);
 	});
 	//$scope.category = Category.get({ categoryId: $stateParams.id });
   };
@@ -332,10 +335,10 @@ angular.module('strateGISApp.controllers', ['ngMaterial', 'ngMessages']).control
 	$scope.loadCategory_definition(); // Load a category which can be edited on UI
 	
 }).controller('AppCtrl', function ($scope, $timeout, $mdSidenav, $log, $http, ServerSetting) {
-    $scope.toggleLeft = buildDelayedToggler('left');
+    $scope.toggleLeft = buildToggler('left');
 	
 	$scope.serverSettings = ServerSetting.get();
-	
+
     /**
      * Supplies a function that will continue to operate until the
      * time is up.

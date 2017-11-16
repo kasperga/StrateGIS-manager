@@ -1,7 +1,9 @@
 <h2 class="md-title">Category definition</h2>
 
 <p>Use the function 'Check-in analysis layer' to add a new category definition.</p>
-
+<br>
+<md-button ui-sref="spCheckinNewAnalysisLayer" class="md-raised md-primary">Check-in new Analysis Layer</md-button>
+<br><br><br>
 <table class="table">
 	<tr> 
 		<td><b>Category</b></td>
@@ -17,9 +19,13 @@
 			<md-button class="md-icon-button" aria-label="Edit" ui-sref="editCategory_definition({category_definitionId:category_definition.id})">
 				<md-icon md-svg-icon="/client/icons/pencil.svg"></md-icon>
 			</md-button>
+		</td>
+		<td>
 			<md-button class="md-icon-button" aria-label="View" ui-sref="viewCategory_definition({category_definitionId:category_definition.id})">
 				<md-icon md-svg-icon="/client/icons/eye.svg"></md-icon>
 			</md-button>
+		</td>
+		<td>
             <md-button class="md-icon-button" aria-label="Delete" ng-click="deleteCategory_definition(category_definition)">
 				<md-icon md-svg-icon="/client/icons/x.svg"></md-icon>
 			</md-button>
